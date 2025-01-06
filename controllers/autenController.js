@@ -1,7 +1,7 @@
 // controllers/authController.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const userModel = require('../models/userModel');
+const userModel = require('../models/usuarioModel');
 
 // Función para registrar un nuevo usuario
 const registerUser = async (req, res) => {

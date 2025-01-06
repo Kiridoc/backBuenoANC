@@ -6,11 +6,19 @@ const { getPreguntas, getPreguntaById, createPregunta, updatePregunta, deletePre
 
 // Rutas de preguntas
 
+/** 
+ * @swagger
+ * tags:
+ *  name: preguntas-controller
+ *  description: Gestión de preguntas frecuentes
+ */
+
 /**
  * @swagger
  * /api/preguntas:
  *   get:
  *     summary: Obtener todas las preguntas frecuentes
+ *     tags: [preguntas-controller]
  *     description: Retorna una lista de todas las preguntas frecuentes almacenadas.
  *     responses:
  *       200:
@@ -36,6 +44,7 @@ router.get('/', getPreguntas);              // Obtener todas las preguntas
  * /api/preguntas/{id}:
  *   get:
  *     summary: Obtener una pregunta por ID
+ *     tags: [preguntas-controller]
  *     description: Retorna una pregunta específica según el ID proporcionado.
  *     parameters:
  *       - in: path
@@ -68,6 +77,7 @@ router.get('/:id', getPreguntaById);        // Obtener una pregunta por ID
  * /api/preguntas:
  *   post:
  *     summary: Crear una nueva pregunta
+ *     tags: [preguntas-controller]
  *     description: Permite crear una nueva pregunta frecuente en el sistema.
  *     requestBody:
  *       required: true
@@ -93,6 +103,7 @@ router.post('/', createPregunta);           // Crear una nueva pregunta
  * /api/preguntas/{id}:
  *   put:
  *     summary: Actualizar una pregunta
+ *     tags: [preguntas-controller]
  *     description: Permite actualizar una pregunta existente en el sistema.
  *     parameters:
  *       - in: path
@@ -125,6 +136,7 @@ router.put('/:id', updatePregunta);         // Actualizar una pregunta
  * /api/preguntas/{id}:
  *   delete:
  *     summary: Eliminar una pregunta
+ *     tags: [preguntas-controller]
  *     description: Permite eliminar una pregunta específica por ID.
  *     parameters:
  *       - in: path

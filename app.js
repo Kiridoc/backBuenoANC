@@ -5,7 +5,10 @@ const bodyParser = require('body-parser');
 
 //Rutas de rutas XD
 const preguntasRoutes = require('./routes/preguntas');
-const authRoutes = require('./routes/auth'); 
+const autenRoutes = require('./routes/auten'); 
+const eventosRoutes = require('./routes/eventos');
+const showsRoutes = require('./routes/shows');
+const buzonRoutes = require('./routes/buzon');
 
 //Swagger B)
 const swaggerUi = require('swagger-ui-express');
@@ -38,7 +41,10 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Rutas de la API
 app.use('/api/preguntas', preguntasRoutes);
-app.use('/api/auth', authRoutes);  // Monta las rutas de autenticación
+app.use('/api/auten', autenRoutes);  // Monta las rutas de autenticación
+app.use('/api/eventos', eventosRoutes);  // Monta las rutas de eventos
+app.use('/api/shows', showsRoutes);  // Monta las rutas de shows
+app.use('/api/buzon', buzonRoutes);  // Monta las rutas de buzon
 
 // Manejo de rutas no encontradas
 app.use((req, res, next) => {

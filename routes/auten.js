@@ -1,13 +1,21 @@
 // routes/authRoutes.js
 const express = require('express');
 const router = express.Router();
-const authController = require('../controllers/authController');
+const authController = require('../controllers/autenController');
+
+/** 
+ * @swagger
+ * tags:
+ *  name: auten-controller
+ *  description: Gestión de autenticación
+ */
 
 /**
  * @swagger
- * /api/auth/register:
+ * /api/auten/registro:
  *   post:
  *     summary: Registrar un nuevo usuario
+ *     tags: [auten-controller]
  *     description: Crea un nuevo usuario en la base de datos.
  *     requestBody:
  *       required: true
@@ -36,13 +44,14 @@ const authController = require('../controllers/authController');
  *       500:
  *         description: Error al registrar el usuario
  */
-router.post('/register', authController.registerUser);
+router.post('/registro', authController.registerUser);
 
 /**
  * @swagger
- * /api/auth/login:
+ * /api/auten/logueo:
  *   post:
  *     summary: Iniciar sesión
+ *     tags: [auten-controller]
  *     description: Permite a un usuario registrado iniciar sesión y recibir un token JWT.
  *     requestBody:
  *       required: true
@@ -59,7 +68,7 @@ router.post('/register', authController.registerUser);
  *                 description: Contraseña del usuario
  *     responses:
  *       200:
- *         description: Login exitoso
+ *         description: Logueo exitoso
  *         content:
  *           application/json:
  *             schema:
@@ -78,7 +87,7 @@ router.post('/register', authController.registerUser);
  *       500:
  *         description: Error interno del servidor
  */
-router.post('/login', authController.loginUser);
+router.post('/logueo', authController.loginUser);
 
 module.exports = router;
 
