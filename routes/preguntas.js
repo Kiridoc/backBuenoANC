@@ -4,6 +4,10 @@ const router = express.Router();
 
 const { getPreguntas, getPreguntaById, createPregunta, updatePregunta, deletePregunta } = require('../controllers/preguntasController');
 
+const { authorize, authorize2 } = require('../middleware/autorizacion');
+
+const verifyToken = require('../middleware/verifyToken');
+
 // Rutas de preguntas
 
 /** 
@@ -19,6 +23,7 @@ const { getPreguntas, getPreguntaById, createPregunta, updatePregunta, deletePre
  *   get:
  *     summary: Obtener todas las preguntas frecuentes
  *     tags: [preguntas-controller]
+ *     security: []
  *     description: Retorna una lista de todas las preguntas frecuentes almacenadas.
  *     responses:
  *       200:
@@ -45,6 +50,7 @@ router.get('/', getPreguntas);              // Obtener todas las preguntas
  *   get:
  *     summary: Obtener una pregunta por ID
  *     tags: [preguntas-controller]
+ *     security: []
  *     description: Retorna una pregunta específica según el ID proporcionado.
  *     parameters:
  *       - in: path
@@ -72,12 +78,16 @@ router.get('/', getPreguntas);              // Obtener todas las preguntas
  */
 router.get('/:id', getPreguntaById);        // Obtener una pregunta por ID
 
+router.use(verifyToken);
+
 /**
  * @swagger
  * /api/preguntas:
  *   post:
  *     summary: Crear una nueva pregunta
  *     tags: [preguntas-controller]
+ *     security:
+ *       - bearerAuth: []
  *     description: Permite crear una nueva pregunta frecuente en el sistema.
  *     requestBody:
  *       required: true
@@ -96,7 +106,7 @@ router.get('/:id', getPreguntaById);        // Obtener una pregunta por ID
  *       400:
  *         description: Error en los datos proporcionados
  */
-router.post('/', createPregunta);           // Crear una nueva pregunta
+router.post('/', authorize2(1 , 2) ,createPregunta);           // Crear una nueva pregunta
 
 /**
  * @swagger
@@ -104,6 +114,8 @@ router.post('/', createPregunta);           // Crear una nueva pregunta
  *   put:
  *     summary: Actualizar una pregunta
  *     tags: [preguntas-controller]
+ *     security:
+ *       - bearerAuth: []
  *     description: Permite actualizar una pregunta existente en el sistema.
  *     parameters:
  *       - in: path
@@ -129,7 +141,7 @@ router.post('/', createPregunta);           // Crear una nueva pregunta
  *       404:
  *         description: Pregunta no encontrada
  */
-router.put('/:id', updatePregunta);         // Actualizar una pregunta
+router.put('/:id', authorize2(1,2) , updatePregunta);         // Actualizar una pregunta
 
 /**
  * @swagger
@@ -137,6 +149,8 @@ router.put('/:id', updatePregunta);         // Actualizar una pregunta
  *   delete:
  *     summary: Eliminar una pregunta
  *     tags: [preguntas-controller]
+ *     security:
+ *       - bearerAuth: []
  *     description: Permite eliminar una pregunta específica por ID.
  *     parameters:
  *       - in: path
@@ -151,7 +165,7 @@ router.put('/:id', updatePregunta);         // Actualizar una pregunta
  *       404:
  *         description: Pregunta no encontrada
  */
-router.delete('/:id', deletePregunta);      // Eliminar una pregunta
+router.delete('/:id', authorize2(1,2) , deletePregunta);      // Eliminar una pregunta
 
 module.exports = router;
 

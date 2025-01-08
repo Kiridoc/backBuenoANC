@@ -16,19 +16,31 @@ const swaggerJsdoc = require('swagger-jsdoc');
 
 // Swagger configuration
 const options = {
-    definition: {
-      openapi: '3.0.0',  // Definir la versión de OpenAPI
-      info: {
-        title: 'API de ANC',  // Nombre de tu API
-        version: '1.0.0',  // Versión
-        description: 'Documentación de la API para gestionar el backend de la página del Acuario Nacional de Cuba',  // Descripción
-      },
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API de ANC',
+      version: '1.0.0',
+      description: 'Documentación de la API para gestionar el backend de la página del Acuario Nacional de Cuba',
     },
-    apis: ['./routes/*.js'],  // Directorio donde están las rutas de la API (ajusta este directorio si las rutas están en otro lado)
-  };
-  
-  // Generación de la especificación de Swagger
-  const swaggerSpec = swaggerJsdoc(options);
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        }
+      }
+    },
+    security: [{
+      bearerAuth: []
+    }]
+  },
+  apis: ['./routes/*.js'],
+};
+
+// Generación de la especificación de Swagger
+const swaggerSpec = swaggerJsdoc(options);
 
 const app = express();
 

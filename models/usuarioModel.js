@@ -22,4 +22,11 @@ const getUserByName = async (nombre) => {
   return result.rows[0];  // Devuelve el usuario encontrado
 };
 
-module.exports = { createUser, getUserByName };
+//Función para obtener todos los usuarios
+const getAllUsers = async () => {
+  const { rows } = await pool.query('SELECT * FROM usuario');
+  return rows;
+};
+
+module.exports = { createUser, getUserByName, getAllUsers };
+
