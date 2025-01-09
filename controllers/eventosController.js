@@ -1,12 +1,13 @@
 // controllers/eventosController.js
 const { getAllEventos, getEventoById, insertEvento, updateEventoById, deleteEventoById, deleteAllEventos } = require('../models/eventoModel');
+const { validateCreateUpdateEvento } = require('../validations/eventoValidation');  // Importamos la validación
 
 const getEventos = async (req, res) => {
   try {
     const eventos = await getAllEventos();
     res.json(eventos);
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ error: 'Error al obtener los eventos' });
   }
 };
@@ -25,8 +26,11 @@ const getEvento = async (req, res) => {
 const createEvento = async (req, res) => {
   try {
     const { nombre_evento, titulo, descripcion, fecha, imagen } = req.body;
-    if (!nombre_evento || !titulo || !descripcion || !fecha) {
-      return res.status(400).json({ error: 'Todos los campos obligatorios deben ser completados' });
+
+    // Validar los datos
+    const errors = validateCreateUpdateEvento({ nombre_evento, titulo, descripcion, fecha, imagen });
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors.join(', ') });
     }
 
     const nuevoEvento = await insertEvento({ nombre_evento, titulo, descripcion, fecha, imagen });
@@ -40,6 +44,13 @@ const updateEvento = async (req, res) => {
   try {
     const { id } = req.params;
     const { nombre_evento, titulo, descripcion, fecha, imagen } = req.body;
+
+    // Validar los datos
+    const errors = validateCreateUpdateEvento({ nombre_evento, titulo, descripcion, fecha, imagen });
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors.join(', ') });
+    }
+
     const eventoActualizado = await updateEventoById(id, { nombre_evento, titulo, descripcion, fecha, imagen });
     if (!eventoActualizado) return res.status(404).json({ error: 'Evento no encontrado' });
     res.json(eventoActualizado);
@@ -77,3 +88,4 @@ module.exports = {
   deleteEvento,
   deleteEventos,
 };
+
