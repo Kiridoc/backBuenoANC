@@ -20,9 +20,9 @@ const registerUserSchema = Joi.object({
     'string.base': 'El teléfono debe ser una cadena de texto',
     'string.pattern.base': 'El teléfono debe tener 8 dígitos',
   }),
-  rol: Joi.string().valid('admin', 'user').optional().default('user').messages({
-    'string.base': 'El rol debe ser una cadena de texto',
-    'any.only': 'El rol debe ser "admin" o "user"',
+  rol: Joi.number().valid(1, 2).optional().default(2).messages({
+    'number.base': 'El rol debe ser un número',
+    'any.only': 'El rol debe ser 1 para admin o 2 para técnico',
   })
 });
 
