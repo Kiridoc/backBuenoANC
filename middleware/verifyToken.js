@@ -11,15 +11,18 @@ const verifyToken = (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.userId = decoded.userId;
-    req.userRole = decoded.role;  // Asegurarnos de que capturamos el rol del token
-    console.log('Token decodificado:', decoded); // Para debugging
-    console.log('Role asignado:', req.userRole); // Para debugging
+    req.userRole = decoded.role;
     next();
   } catch (error) {
-    console.error('Error de verificación:', error); // Para debugging
+    // Agregamos manejo específico para tokens expirados
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({ 
+        error: 'Token expirado',
+        expired: true // Este flag ayuda al frontend a saber que debe usar el refresh token
+      });
+    }
     res.status(403).json({ error: 'Token no válido' });
   }
 };
 
 module.exports = verifyToken;
-

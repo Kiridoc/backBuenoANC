@@ -9,7 +9,7 @@ const createUser = async (nombre, password, telefono, rol) => {
 
   // Guardar el usuario en la base de datos
   const result = await pool.query(
-    'INSERT INTO usuario (id, nombre, contrasena, telefono, is_asignado, id_rol_usuario) VALUES ( (SELECT COALESCE(MAX(id), 0) + 1 FROM public.usuario) , $1, $2, $3, false, $4) RETURNING *',
+    'INSERT INTO usuario (id, nombre, contrasena, telefono, is_asignado, rol) VALUES ( (SELECT COALESCE(MAX(id), 0) + 1 FROM public.usuario) , $1, $2, $3, false, $4) RETURNING *',
     [nombre, hashedPassword, telefono, rol]
   );
 

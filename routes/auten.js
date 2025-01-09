@@ -19,7 +19,7 @@ const verifyToken = require('../middleware/verifyToken');
  *     summary: Iniciar sesión
  *     tags: [auten-controller]
  *     security: []
- *     description: Permite a un usuario registrado iniciar sesión y recibir un token JWT.
+ *     description: Permite a un usuario registrado iniciar sesión y recibir tokens JWT.
  *     requestBody:
  *       required: true
  *       content:
@@ -44,20 +44,57 @@ const verifyToken = require('../middleware/verifyToken');
  *                 message:
  *                   type: string
  *                   description: Mensaje de éxito
- *                 token:
+ *                 accessToken:
  *                   type: string
- *                   description: El token JWT generado
- *       404:
- *         description: Usuario no encontrado
- *       400:
- *         description: Contraseña incorrecta
- *       500:
- *         description: Error interno del servidor
+ *                   description: Token JWT de acceso (1 hora)
+ *                 refreshToken:
+ *                   type: string
+ *                   description: Token JWT de actualización (7 días)
+ *                 role:
+ *                   type: number
+ *                   description: Rol del usuario
+ *                 userId:
+ *                   type: string
+ *                   description: ID del usuario
  */
 router.post('/logueo', autenController.loginUser);
 
-// Autenticar todas las rutas primero router.
+/**
+ * @swagger
+ * /api/auten/refresh-token:
+ *   post:
+ *     summary: Renovar tokens
+ *     tags: [auten-controller]
+ *     security: []
+ *     description: Usa un refresh token para obtener nuevos tokens de acceso y actualización
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 description: Token de actualización actual
+ *     responses:
+ *       200:
+ *         description: Tokens renovados exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *                 refreshToken:
+ *                   type: string
+ */
+router.post('/refresh-token', autenController.refreshTokens);
+
+// Middleware de autenticación para las rutas siguientes
 router.use(verifyToken);
+
 
 /**
  * @swagger
