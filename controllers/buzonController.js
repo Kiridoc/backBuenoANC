@@ -1,5 +1,6 @@
 // controllers/buzonController.js
 const { getAllBuzones, getBuzon, insertBuzon, deleteBuzonById } = require('../models/buzonModel');
+const { validateCreateBuzon, validateId } = require('../validations/buzonValidation');
 
 const getBuzones = async (req, res) => {
   try {
@@ -14,37 +15,63 @@ const getBuzones = async (req, res) => {
 const getBuzonById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Validar ID
+    const idError = validateId(id);
+    if (idError) {
+      return res.status(400).json({ error: idError });
+    }
+
     const buzon = await getBuzon(id);
-    if (!buzon) return res.status(404).json({ error: 'Buzon no encontrado' });
+    if (!buzon) {
+      return res.status(404).json({ error: `Buzón con ID ${id} no encontrado` });
+    }
     res.json(buzon);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener el buzon' });
+    res.status(500).json({ error: 'Error al obtener el buzón' });
   }
 };
 
 const createBuzon = async (req, res) => {
   try {
     const { pregunta, correo } = req.body;
-    if (!pregunta || !correo) {
-      return res.status(400).json({ error: 'La pregunta y el correo son obligatorios' });
+
+    // Validar los datos
+    const errors = validateCreateBuzon(pregunta, correo);
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors.join(', ') });
     }
 
+    // Inserción en la base de datos
     const nuevoBuzon = await insertBuzon({ pregunta, correo });
-    res.status(201).json(nuevoBuzon);
+    res.status(201).json({
+      id: nuevoBuzon.id,
+      pregunta: nuevoBuzon.pregunta,
+      correo: nuevoBuzon.correo,
+    });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Error al crear el buzon' });
+    res.status(500).json({ error: 'Error al crear el buzón' });
   }
 };
 
 const deleteBuzon = async (req, res) => {
   try {
     const { id } = req.params;
+
+    // Validar ID
+    const idError = validateId(id);
+    if (idError) {
+      return res.status(400).json({ error: idError });
+    }
+
     const resultado = await deleteBuzonById(id);
-    if (!resultado) return res.status(404).json({ error: 'Buzon no encontrado' });
-    res.json({ message: 'Buzon eliminado correctamente' });
+    if (!resultado) {
+      return res.status(404).json({ error: `Buzón con ID ${id} no encontrado` });
+    }
+    res.json({ message: 'Buzón eliminado correctamente' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al eliminar el buzon' });
+    res.status(500).json({ error: 'Error al eliminar el buzón' });
   }
 };
 
